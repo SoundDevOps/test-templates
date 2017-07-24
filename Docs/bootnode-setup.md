@@ -135,7 +135,7 @@ bootnodes=["enode://<128 hex characters>@ip_address:30300"]
 Save the file, commit it  and push to github.
 
 ### Generate initial keys for first users
-Connect to the virtual machine, `cd oracles-initial-keys` and run the following command to generate initial keys
+Connect to the virtual machine, `cd soundchain-initial-keys` and run the following command to generate initial keys
 ```
 node ./generateInitialKey.js
 ```
@@ -156,7 +156,7 @@ It is important to note, that each deployment pulls some files from external rep
 * eth-net-intelligence-api is using this [repo](https://github.com/oraclesorg/eth-net-intelligence-api)
 * eth-netstats dashboard is pulled from [eth-netstats](https://github.com/oraclesorg/eth-netstats)
 * docker image used to periodically auto-update the container is pulled from [docker hub](https://hub.docker.com/r/oraclesorg/docker-run/), which uses [this repo](https://github.com/oraclesorg/docker-run) to rebuild the image
-* initial keys are generate using [this script](https://github.com/oraclesorg/oracles-initial-keys), which has a `config.json` file with contract definition in it.
+* initial keys are generate using [this script](https://github.com/soundchain/soundchain-initial-keys), which has a `config.json` file with contract definition in it.
 
 There are other repositories involved in the workflow:
 * [metamask plugin](https://github.com/oraclesorg/metamask-plugin)
