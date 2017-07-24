@@ -10,7 +10,7 @@ echo "pwd: $(pwd)"
 # script parameters
 INSTALL_DOCKER_VERSION="17.03.1~ce-0~ubuntu-xenial"
 INSTALL_DOCKER_IMAGE="ethcore/parity:beta-release"
-INSTALL_CONFIG_REPO="https://raw.githubusercontent.com/oraclesorg/test-templates/master"
+INSTALL_CONFIG_REPO="https://raw.githubusercontent.com/soundchain/test-templates/master"
 GENESIS_JSON="demo-spec.json"
 NODE_TOML="node-to-enode.toml"
 

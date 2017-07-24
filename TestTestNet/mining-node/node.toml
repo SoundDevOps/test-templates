@@ -1,9 +1,10 @@
-# dev branch
 [parity]
 chain = "spec.json"
 base_path = "parity"
+# db_path = "parity/chains"
+# keys_path = "parity/keys"
 [network]
-bootnodes=["enode://43133442acfb613032cfeb73d2e2ff27df26c06c6ea367d1692e256bb63eeddb28f3f5d6cece967369bfde8bf8c2047e8c09211ab955436c9e06f9217aef9f80@40.71.191.13:30300"]
+bootnodes=["enode://6101cc958c50cee8423da3d3cfa7dbc08f613ee4ff8ba61f5d87b28eafa14e894e94d2ab904e9bf02204a2df013caa86926823a9d6e5a3df46a080694345ed0e@13.94.141.135:30300"]
 port = 30300
 discovery=true
 [rpc]
@@ -12,3 +13,12 @@ interface = "all"
 hosts = ["all"]
 port = 8540
 apis = ["web3", "eth", "net", "personal", "parity", "parity_set", "traces", "rpc", "parity_accounts"]
+# [ui]
+# interface = "0.0.0.0"
+# port = 8180
+# [dapps]
+# cors = "all"
+# interface = "0.0.0.0"
+# hosts = ["all"]
+# port = 8080
+# path = "parity/dapps"

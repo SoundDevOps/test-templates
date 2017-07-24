@@ -36,8 +36,8 @@ declare -p
 # script parameters
 INSTALL_DOCKER_VERSION="17.03.1~ce-0~ubuntu-xenial"
 INSTALL_DOCKER_IMAGE="parity/parity:v1.6.8"
-INSTALL_CONFIG_REPO="https://raw.githubusercontent.com/oraclesorg/test-templates/dev/TestTestNet/bootnode"
-GENESIS_REPO_LOC="https://raw.githubusercontent.com/oraclesorg/oracles-scripts/devtestnet/spec.json"
+INSTALL_CONFIG_REPO="https://raw.githubusercontent.com/soundchain/test-templates/dev/TestTestNet/bootnode"
+GENESIS_REPO_LOC="https://raw.githubusercontent.com/soundchain/soundchain-scripts/devtestnet/spec.json"
 GENESIS_JSON="spec.json"
 NODE_TOML="node.toml"
 NODE_PWD="node.pwd"
@@ -79,7 +79,7 @@ add_user_to_docker_group() {
     newgrp docker
     newgrp -
     #newgrp "${orig_group_id}"
-    
+
     echo "===== Groups: "
     groups
     echo "<===== add_user_to_docker_group"
@@ -344,7 +344,7 @@ use_deb() {
     curl -O http://d1h4xl4cr1h0mo.cloudfront.net/v1.6.8/x86_64-unknown-linux-gnu/parity_1.6.8_amd64.deb
     dpkg -i parity_1.6.8_amd64.deb
     apt install dtach
-    
+
     cat > rundeb.sh << EOF
 sudo parity -lengine=trace --config "${NODE_TOML}" --ui-no-validation >> parity.out 2>> parity.err
 EOF
@@ -402,7 +402,7 @@ main () {
     install_dashboard
     install_netstats
     install_chain_explorer
-    
+
     download_initial_keys_script
 }
 
