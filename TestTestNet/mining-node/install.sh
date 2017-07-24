@@ -63,6 +63,7 @@ add_user_to_docker_group() {
 install_ntpd() {
     echo "=====> install_ntpd"
     sudo timedatectl set-ntp no
+    sudo apt-get update
     sudo apt-get -y install ntp
 
     sudo bash -c "cat > /etc/cron.hourly/ntpdate << EOF
