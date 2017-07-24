@@ -372,8 +372,8 @@ EOF"
 
 download_initial_keys_script() {
     echo "=====> download_initial_keys_script"
-    git clone https://github.com/oraclesorg/oracles-initial-keys
-    cd oracles-initial-keys
+    git clone https://github.com/soundchain/soundchain-initial-keys
+    cd soundchain-initial-keys
     npm install
     cd ..
     echo "<===== download_initial_keys_script"
