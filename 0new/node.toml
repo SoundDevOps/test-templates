@@ -30,5 +30,5 @@ password = ["node.pwd"]
 
 [mining]
 force_sealing = true
-engine_signer = "0xdd0bb0e2a1594240fed0c2f2c17c1e9ab4f87126"
+engine_signer = "0xf982f6ac73a26e243b7d26e0388b104817f75933"
 reseal_on_txs = "none"

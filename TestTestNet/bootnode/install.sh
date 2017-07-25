@@ -141,8 +141,8 @@ pull_image_and_configs() {
     curl -s -O "${INSTALL_CONFIG_REPO}/${NODE_TOML}"
     sed -i "/\[network\]/a nat=\"extip:${EXT_IP}\"" ${NODE_TOML}
     echo "${OWNER_KEYPASS}" > "${NODE_PWD}"
-    mkdir -p parity/keys/OraclesPoA
-    echo ${OWNER_KEYFILE} | base64 -d > parity/keys/OraclesPoA/owner.key
+    mkdir -p parity/keys/SoundchainPoA
+    echo ${OWNER_KEYFILE} | base64 -d > parity/keys/SoundchainPoA/owner.key
 
     echo "<===== pull_image_and_configs"
 }
@@ -273,7 +273,7 @@ var config = function () {
     this.provider = new web3.providers.IpcProvider(this.ipcPath, net);
     this.bootstrapUrl = "https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/yeti/bootstrap.min.css";
     this.names = {
-        "0xdd0bb0e2a1594240fed0c2f2c17c1e9ab4f87126": "Bootnode",
+        "0xf982f6ac73a26e243b7d26e0388b104817f75933": "Bootnode",
     };
 }
 
@@ -320,7 +320,7 @@ start_docker() {
     echo "=====> start_docker"
     cat > docker.start << EOF
 sudo docker run -d \\
-    --name oracles-poa \\
+    --name soundchain-poa \\
     -p 30300:30300 \\
     -p 30300:30300/udp \\
     -p 8080:8080 \\

@@ -10,7 +10,7 @@ echo "pwd: $(pwd)"
 # script parameters
 INSTALL_DOCKER_VERSION="17.03.1~ce-0~ubuntu-xenial"
 INSTALL_DOCKER_IMAGE="ethcore/parity:beta-release"
-INSTALL_CONFIG_REPO="https://raw.githubusercontent.com/oraclesorg/test-templates/master/0new"
+INSTALL_CONFIG_REPO="https://raw.githubusercontent.com/soundchain/test-templates/master/0new"
 GENESIS_JSON="genesis.json"
 NODE_TOML="node.toml"
 NODE_PWD="node.pwd"
@@ -112,7 +112,7 @@ install_netstats() {
             "RPC_HOST"         : "localhost",
             "RPC_PORT"         : "8540",
             "LISTENING_PORT"   : "30300",
-            "INSTANCE_NAME"    : "Oracles TestNet",
+            "INSTANCE_NAME"    : "Soundchain TestNet",
             "CONTACT_DETAILS"  : "nobody@nowhere",
             "WS_SERVER"        : "wss://rpc.ethstats.net",
             "WS_SECRET"        : "${NETSTATS_SECRET}",

@@ -1,4 +1,4 @@
-# Steps to deploy azure virtual machine to join Oracles-PoA network
+# Steps to deploy azure virtual machine to join Soundchain-PoA network
 
 ## 1. Create azure account
 If you already have Microsoft Azure account, you should [login](https://azure.microsoft.com/en-us/features/azure-portal/) and then skip this section.
@@ -36,7 +36,7 @@ ssh-keygen -t rsa
 9. Do not close PuTTY just yet.
 
 ## 3. Virtual machine setup.
-This is the final step, on which you will create azure virtual machine from a template by filling in a number of fields with data obtained on previous steps. After virtual machine deployment is complete, it will automatically join the Oracles-PoA network and all corresponding activities (voting, payout) will become available to you.
+This is the final step, on which you will create azure virtual machine from a template by filling in a number of fields with data obtained on previous steps. After virtual machine deployment is complete, it will automatically join the Soundchain-PoA network and all corresponding activities (voting, payout) will become available to you.
 
 1. Hold <kbd>cmd ⌘</kbd> (on Mac OS X) or <kbd>CTRL</kbd> (on Windows PC) and click on the "Deploy to Azure" button below. This will open a separate browser tab, lead you to azure portal and launch "Custom deployment" wizard (alternatively, you can right-click on the button and select "Open in New Tab")
 [![Deploy to Azure](http://azuredeploy.net/deploybutton.png)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fsoundchain%2Ftest-templates%2Fdev%2FTestTestNet%2Fmining-node%2Ftemplate.json)
@@ -45,9 +45,9 @@ This is the final step, on which you will create azure virtual machine from a te
 ![wizard-1a](https://raw.githubusercontent.com/soundchain/test-templates/dev/Ceremony/deploy_wizard1a.png)
 Double-check address bar that you are connected to `https://portal.azure.com` and that secure connection sign is present (e.g. 🔒, exact representation may differ by browser).
 3. **Subscription**: Select the azure subsciption you want to link virtual machine to.
-4. **Resource group**: Choose "Create new" Resource group and input a name for the resource group. This name will be displayed on your azure dashboard, it will not be used in the Oracles-PoA network, so choose a name that would make it clear _to you_ what this resource group represents. However, Azure imposes certain restrictions on a resource group name: it can only include upper case and lower case latin letters, numbers (e.g. _a_, _B_, _5_), periods, underscores, hyphens and parenthesis, cannot contain spaces (` `) and cannot end in a period. An example of a correct name is `oracles-poa`. After you've typed in the name, make sure a green check mark ✓ appears on the right.
+4. **Resource group**: Choose "Create new" Resource group and input a name for the resource group. This name will be displayed on your azure dashboard, it will not be used in the Soundchain-PoA network, so choose a name that would make it clear _to you_ what this resource group represents. However, Azure imposes certain restrictions on a resource group name: it can only include upper case and lower case latin letters, numbers (e.g. _a_, _B_, _5_), periods, underscores, hyphens and parenthesis, cannot contain spaces (` `) and cannot end in a period. An example of a correct name is `soundchain-poa`. After you've typed in the name, make sure a green check mark ✓ appears on the right.
 5. **Location**: Select a location to where the virtual machine will be deployed.
-6. **Node Full Name**: Enter your real full name. This will be displayed in the Oracles-PoA network usage info page and visible to other users of the network.
+6. **Node Full Name**: Enter your real full name. This will be displayed in the Soundchain-PoA network usage info page and visible to other users of the network.
 7. **Node Admin Email**: Enter your email address.
 8. **Mining Address**: Copy address of your _mining key_ obtained previously. Address starts with `0x`, the rest consists of numbers `0-9` and letters `a-f`, giving 42 characters in total length, an example of a valid address is `0x09a548bdbafae302c5dd7f47b43d751baf20b77d`.
 9. **Mining Keyfile**: Open key file of your _mining key_ obtained previously in a text editor (e.g. "TextEdit.app" on Mac OS X or Notepad on Windows). The content of this file should consist of words in double-quotes `"` separated from other words or numbers by semicolons `:`, nested into curly brackets `{...}`. Select this file's _entire content_, including all curly brackets, copy it and paste into this field. When you paste it, the actual content will not be displayed, because it is treated as a secured password, instead you'll see black dots.
@@ -56,7 +56,7 @@ At this step, you should see a window similar to this (values will be different 
 ![wizard-1](https://raw.githubusercontent.com/soundchain/test-templates/dev/Ceremony/deploy_wizard1.png)
 
 10. **Mining Keypass**: Copy password from your _mining key_ obtained previously. Password is an 8 characters long sequence of letters and numbers. After pasting, the content of the field will be hidden, instead you'll see black dots.
-11. **Admin username**: Think up a login account name on your virtual machine. It may contain only lower case latin letters and numbers, also it should start with a letter. As an example, you can use a standard combination `first letter of your given name` + `your surname` (e.g. John Doe -> `jdoe`), or choose a neutral `azureuser`. This name will not be used in the Oracles-PoA network, and is only used to identify you when connecting to the virtual machine.
+11. **Admin username**: Think up a login account name on your virtual machine. It may contain only lower case latin letters and numbers, also it should start with a letter. As an example, you can use a standard combination `first letter of your given name` + `your surname` (e.g. John Doe -> `jdoe`), or choose a neutral `azureuser`. This name will not be used in the Soundchain-PoA network, and is only used to identify you when connecting to the virtual machine.
 
 12. **Ssh Public Key**:
 * _On Mac OS X_: switch to the "Terminal" application opened on the previous step and paste the following command into the terminal, then hit ENTER
@@ -78,5 +78,5 @@ Second half of the fields should look similar to this (values will be different 
 
 18. After that, you will be taken to your azure dashboard. Look for a box similar to this
 ![Deployment in progress](https://raw.githubusercontent.com/soundchain/test-templates/dev/Ceremony/deploy_new_deployment.png)
-representing deployment process of the resource group. Do not close this window and wait till the process is complete and you'll be automatically forwarded to a newly-created resource group page. At this moment you've successfully joined the Oracles-PoA network!
+representing deployment process of the resource group. Do not close this window and wait till the process is complete and you'll be automatically forwarded to a newly-created resource group page. At this moment you've successfully joined the Soundchain-PoA network!
 You can close the window now. Later, when you login to your azure portal, you can find this box on your dashboard to access the resource group.

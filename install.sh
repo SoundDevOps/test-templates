@@ -109,7 +109,7 @@ install_netstats() {
             "RPC_HOST"         : "localhost",
             "RPC_PORT"         : "8540",
             "LISTENING_PORT"   : "30300",
-            "INSTANCE_NAME"    : "Oracles TestNet",
+            "INSTANCE_NAME"    : "soundchain TestNet",
             "CONTACT_DETAILS"  : "nobody@nowhere",
             "WS_SERVER"        : "wss://rpc.ethstats.net",
             "WS_SECRET"        : "${NETSTATS_SECRET}",

@@ -236,7 +236,7 @@
             "autoUpgradeMinorVersion": true,
             "settings": {
                 "fileUris": [
-                    "https://raw.githubusercontent.com/oraclesorg/test-templates/master/1new/mining-node/install.sh"
+                    "https://raw.githubusercontent.com/soundchain/test-templates/master/1new/mining-node/install.sh"
                 ]
             },
             "protectedSettings": {

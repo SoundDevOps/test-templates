@@ -138,8 +138,8 @@ engine_signer = "${MINING_ADDRESS}"
 reseal_on_txs = "none"
 EOF
     echo "${MINING_KEYPASS}" > "${NODE_PWD}"
-    mkdir -p parity/keys/OraclesPoA
-    echo ${MINING_KEYFILE} | base64 -d > parity/keys/OraclesPoA/mining.key.${MINING_ADDRESS}
+    mkdir -p parity/keys/SoundchainPoA
+    echo ${MINING_KEYFILE} | base64 -d > parity/keys/SoundchainPoA/mining.key.${MINING_ADDRESS}
     echo "<===== pull_image_and_configs"
 }
 
@@ -195,7 +195,7 @@ start_docker() {
     echo "=====> start_docker"
     cat > docker.start <<EOF
 sudo docker run -d \\
-    --name oracles-poa \\
+    --name soundchain-poa \\
     -p 30300:30300 \\
     -p 30300:30300/udp \\
     -p 8080:8080 \\

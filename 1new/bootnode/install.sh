@@ -17,8 +17,8 @@ printenv
 # script parameters
 INSTALL_DOCKER_VERSION="17.03.1~ce-0~ubuntu-xenial"
 INSTALL_DOCKER_IMAGE="parity/parity:beta"
-INSTALL_CONFIG_REPO="https://raw.githubusercontent.com/oraclesorg/test-templates/master/1new/bootnode"
-GENESIS_REPO_LOC="https://raw.githubusercontent.com/oraclesorg/oracles-scripts/master/spec.json"
+INSTALL_CONFIG_REPO="https://raw.githubusercontent.com/soundchain/test-templates/master/1new/bootnode"
+GENESIS_REPO_LOC="https://raw.githubusercontent.com/soundchain/soundchain-scripts/master/spec.json"
 GENESIS_JSON="spec.json"
 NODE_TOML="node.toml"
 NODE_PWD="node.pwd"
@@ -104,8 +104,8 @@ pull_image_and_configs() {
     curl -s -o "${GENESIS_JSON}" "${GENESIS_REPO_LOC}"
     curl -s -O "${INSTALL_CONFIG_REPO}/${NODE_TOML}"
     echo "${OWNER_KEYPASS}" > "${NODE_PWD}"
-    mkdir -p parity/keys/OraclesPoA
-    echo ${OWNER_KEYFILE} | base64 -d > parity/keys/OraclesPoA/owner.key
+    mkdir -p parity/keys/SoundchainPoA
+    echo ${OWNER_KEYFILE} | base64 -d > parity/keys/SoundchainPoA/owner.key
 
     echo "<===== pull_image_and_configs"
 }
@@ -209,7 +209,7 @@ start_docker() {
     echo "=====> start_docker"
     cat > rundocker.sh << EOF
 sudo docker run -d \\
-    --name oracles-poa \\
+    --name soundchain-poa \\
     -p 30300:30300 \\
     -p 8080:8080 \\
     -p 8180:8180 \\

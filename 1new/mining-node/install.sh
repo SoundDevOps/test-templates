@@ -17,8 +17,8 @@ printenv
 # script parameters
 INSTALL_DOCKER_VERSION="17.03.1~ce-0~ubuntu-xenial"
 INSTALL_DOCKER_IMAGE="parity/parity:v1.6.6"
-INSTALL_CONFIG_REPO="https://raw.githubusercontent.com/oraclesorg/test-templates/master/1new/mining-node"
-GENESIS_REPO_LOC="https://raw.githubusercontent.com/oraclesorg/oracles-scripts/master/spec.json"
+INSTALL_CONFIG_REPO="https://raw.githubusercontent.com/soundchain/test-templates/master/1new/mining-node"
+GENESIS_REPO_LOC="https://raw.githubusercontent.com/soundchain/soundchain-scripts/master/spec.json"
 GENESIS_JSON="spec.json"
 NODE_TOML="node.toml"
 NODE_PWD="node.pwd"
@@ -120,8 +120,8 @@ engine_signer = "${MINING_ADDRESS}"
 reseal_on_txs = "none"
 EOF
     echo "${MINING_KEYPASS}" > "${NODE_PWD}"
-    mkdir -p parity/keys/OraclesPoA
-    echo ${MINING_KEYFILE} | base64 -d > parity/keys/OraclesPoA/mining.key.${MINING_ADDRESS}
+    mkdir -p parity/keys/SoundchainPoA
+    echo ${MINING_KEYFILE} | base64 -d > parity/keys/SoundchainPoA/mining.key.${MINING_ADDRESS}
     echo "<===== pull_image_and_configs"
 }
 
@@ -168,7 +168,7 @@ start_docker() {
     echo "=====> start_docker"
     cat > rundocker.sh << EOF
 sudo docker run -d \\
-    --name oracles-poa \\
+    --name soundchain-poa \\
     -p 30300:30300 \\
     -p 8080:8080 \\
     -p 8180:8180 \\
@@ -186,8 +186,8 @@ EOF
 
 install_scripts() {
     echo "=====> install_scripts"
-    git clone https://github.com/oraclesorg/oracles-scripts
-    cd oracles-scripts/scripts
+    git clone https://github.com/soundchain/soundchain-scripts
+    cd soundchain-scripts/scripts
     npm install
     sudo cat > /etc/cron.hourly/transferRewardToPayoutKey << EOF
 #!/bin/bash
