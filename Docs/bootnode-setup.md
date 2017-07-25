@@ -153,7 +153,7 @@ It is important to note, that each deployment pulls some files from external rep
 * spec.json (_aka_ genesis.json) and currency transferring scripts are pulled from [soundchain-scripts](https://github.com/soundchain/soundchain-scripts)
 * contract's constructor used in spec.json is the same as in [oracles-contract](https://github.com/oraclesorg/oracles-contract)
 * chain explorer is pulled from [this repo](https://github.com/oraclesorg/chain-explorer)
-* eth-net-intelligence-api is using this [repo](https://github.com/oraclesorg/eth-net-intelligence-api)
+* eth-net-intelligence-api is using this [repo](https://github.com/soundchain/eth-net-intelligence-api)
 * eth-netstats dashboard is pulled from [eth-netstats](https://github.com/oraclesorg/eth-netstats)
 * docker image used to periodically auto-update the container is pulled from [docker hub](https://hub.docker.com/r/oraclesorg/docker-run/), which uses [this repo](https://github.com/oraclesorg/docker-run) to rebuild the image
 * initial keys are generate using [this script](https://github.com/soundchain/soundchain-initial-keys), which has a `config.json` file with contract definition in it.
