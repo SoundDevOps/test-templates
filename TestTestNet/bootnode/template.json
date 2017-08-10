@@ -222,7 +222,7 @@
             "autoUpgradeMinorVersion": true,
             "settings": {
                 "fileUris": [
-                    "https://raw.githubusercontent.com/soundchain/test-templates/dev/TestTestNet/bootnode/install.sh"
+                    "https://raw.githubusercontent.com/musereum/test-templates/dev/TestTestNet/bootnode/install.sh"
                 ]
             },
             "protectedSettings": {

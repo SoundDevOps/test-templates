@@ -3,6 +3,60 @@ set -e
 set -u
 set -x
 
+EXT_IP="$(curl ifconfig.co)"
+
+# Install logentries daemon /*
+start_logentries() {
+    echo "=====> start_logentries"
+    sudo bash -c "echo 'deb http://rep.logentries.com/ trusty main' > /etc/apt/sources.list.d/logentries.list"
+    sudo bash -c "gpg --keyserver pgp.mit.edu --recv-keys C43C79AD && gpg -a --export C43C79AD | apt-key add -"
+    sudo apt-get update
+    sudo apt-get install -y logentries
+    sudo le reinit --user-key=fdefe25c-e9ee-4871-af01-56879cb0971a --pull-server-side-config=False
+
+    mkdir -p /home/${ADMIN_USERNAME}/logs
+    touch /home/${ADMIN_USERNAME}/logs/netstats_daemon.err
+    touch /home/${ADMIN_USERNAME}/logs/netstats_daemon.out
+    touch /home/${ADMIN_USERNAME}/logs/parity.err
+    touch /home/${ADMIN_USERNAME}/logs/parity.out
+    touch /home/${ADMIN_USERNAME}/logs/transferRewardToPayoutKey.out
+    touch /home/${ADMIN_USERNAME}/logs/transferRewardToPayoutKey.err
+
+    sudo bash -c "cat >> /etc/le/config << EOF
+[install_err]
+path = /var/lib/waagent/custom-script/download/0/stderr
+destination = TestTestNets/${EXT_IP}
+[install_out]
+path = /var/lib/waagent/custom-script/download/0/stdout
+destination = TestTestNets/${EXT_IP}
+[netstats_daemon_err]
+path = /home/${ADMIN_USERNAME}/logs/netstats_daemon.err
+destination = TestTestNets/${EXT_IP}
+[netstats_daemon_out]
+path = /home/${ADMIN_USERNAME}/logs/netstats_daemon.out
+destination = TestTestNets/${EXT_IP}
+[parity_err]
+path = /home/${ADMIN_USERNAME}/logs/parity.err
+destination = TestTestNets/${EXT_IP}
+[parity_out]
+path = /home/${ADMIN_USERNAME}/logs/parity.out
+destination = TestTestNets/${EXT_IP}
+[transferReward_out]
+path = /home/${ADMIN_USERNAME}/logs/transferRewardToPayoutKey.out
+destination = TestTestNets/${EXT_IP}
+[transferReward_err]
+path = /home/${ADMIN_USERNAME}/logs/transferRewardToPayoutKey.err
+destination = TestTestNets/${EXT_IP}
+EOF"
+    sudo apt-get install -y logentries-daemon
+    sudo service logentries start
+    echo "<===== start_logentries"
+}
+
+start_logentries
+
+# */
+
 echo "========== dev/mining-node/install.sh starting =========="
 echo "===== current time: $(date)"
 echo "===== username: $(whoami)"
@@ -11,24 +65,23 @@ echo "===== operating system info:"
 lsb_release -a
 echo "===== memory usage info:"
 free -m
-EXT_IP="$(curl ifconfig.co)"
 echo "===== external ip: ${EXT_IP}"
 echo "===== environmental variables:"
 printenv
 
 # script parameters
-INSTALL_DOCKER_VERSION="17.03.1~ce-0~ubuntu-xenial"
-INSTALL_DOCKER_IMAGE="parity/parity:v1.6.8"
-INSTALL_CONFIG_REPO="https://raw.githubusercontent.com/soundchain/test-templates/dev/TestTestNet/mining-node"
-GENESIS_REPO_LOC="https://raw.githubusercontent.com/soundchain/soundchain-scripts/devtestnet/spec.json"
+#INSTALL_DOCKER_VERSION="17.03.1~ce-0~ubuntu-xenial"
+#INSTALL_DOCKER_IMAGE="parity/parity:v1.6.8"
+INSTALL_CONFIG_REPO="https://raw.githubusercontent.com/musereum/test-templates/dev/TestTestNet/mining-node"
+GENESIS_REPO_LOC="https://raw.githubusercontent.com/musereum/musereum-scripts/master/spec.json"
 GENESIS_JSON="spec.json"
 NODE_TOML="node.toml"
 NODE_PWD="node.pwd"
 
-HOME="${HOME:-/root}"
+export HOME="${HOME:-/home/${ADMIN_USERNAME}}"
 
-echo "===== will use docker version: ${INSTALL_DOCKER_VERSION}"
-echo "===== will use parity docker image: ${INSTALL_DOCKER_IMAGE}"
+#echo "===== will use docker version: ${INSTALL_DOCKER_VERSION}"
+#echo "===== will use parity docker image: ${INSTALL_DOCKER_IMAGE}"
 echo "===== repo base path: ${INSTALL_CONFIG_REPO}"
 
 # this should be provided through env by azure template
@@ -49,21 +102,20 @@ prepare_homedir() {
     echo "<===== prepare_homedir"
 }
 
-add_user_to_docker_group() {
-    # based on https://askubuntu.com/questions/477551/how-can-i-use-docker-without-sudo
-    echo "=====> add_user_to_docker_group"
-    sudo groupadd docker
-    sudo gpasswd -a "${ADMIN_USERNAME}" docker
-    newgrp docker
-    echo "===== Groups: "
-    groups
-    echo "<===== add_user_to_docker_group"
-}
+# add_user_to_docker_group() {
+#     # based on https://askubuntu.com/questions/477551/how-can-i-use-docker-without-sudo
+#     echo "=====> add_user_to_docker_group"
+#     sudo groupadd docker
+#     sudo gpasswd -a "${ADMIN_USERNAME}" docker
+#     newgrp docker
+#     echo "===== Groups: "
+#     groups
+#     echo "<===== add_user_to_docker_group"
+# }
 
 install_ntpd() {
     echo "=====> install_ntpd"
     sudo timedatectl set-ntp no
-    sudo apt-get update
     sudo apt-get -y install ntp
 
     sudo bash -c "cat > /etc/cron.hourly/ntpdate << EOF
@@ -110,19 +162,19 @@ install_nodejs() {
     echo "<===== install_nodejs"
 }
 
-install_docker_ce() {
-    echo "=====> install_docker_ce"
-    sudo apt-get -y install apt-transport-https ca-certificates curl software-properties-common
-    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-    sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
-    sudo apt-get update
-    sudo apt-get -y install docker-ce=${INSTALL_DOCKER_VERSION}
-    echo "<===== install_docker_ce"
-}
+# install_docker_ce() {
+#     echo "=====> install_docker_ce"
+#     sudo apt-get -y install apt-transport-https ca-certificates curl software-properties-common
+#     curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+#     sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+#     sudo apt-get update
+#     sudo apt-get -y install docker-ce=${INSTALL_DOCKER_VERSION}
+#     sudo docker pull ${INSTALL_DOCKER_IMAGE}
+#     echo "<===== install_docker_ce"
+# }
 
 pull_image_and_configs() {
     echo "=====> pull_image_and_configs"
-    sudo docker pull ${INSTALL_DOCKER_IMAGE}
 
     # curl -s -O "${INSTALL_CONFIG_REPO}/../${GENESIS_JSON}"
     curl -s -o "${GENESIS_JSON}" "${GENESIS_REPO_LOC}"
@@ -138,28 +190,28 @@ engine_signer = "${MINING_ADDRESS}"
 reseal_on_txs = "none"
 EOF
     echo "${MINING_KEYPASS}" > "${NODE_PWD}"
-    mkdir -p parity/keys/SoundchainPoA
-    echo ${MINING_KEYFILE} | base64 -d > parity/keys/SoundchainPoA/mining.key.${MINING_ADDRESS}
+    mkdir -p parity/keys/MusereumPoA
+    echo ${MINING_KEYFILE} | base64 -d > parity/keys/MusereumPoA/mining.key.${MINING_ADDRESS}
     echo "<===== pull_image_and_configs"
 }
 
 # based on https://get.parity.io
 install_netstats() {
     echo "=====> install_netstats"
-    git clone https://github.com/soundchain/eth-net-intelligence-api
+    git clone https://github.com/musereum/eth-net-intelligence-api
     cd eth-net-intelligence-api
     #sed -i '/"web3"/c "web3": "0.19.x",' package.json
-    sudo npm install
+    npm install
     sudo npm install pm2 -g
 
     cat > app.json << EOL
 [
     {
-        "name"                 : "node-app",
+        "name"                 : "netstats_daemon",
         "script"               : "app.js",
         "log_date_format"      : "YYYY-MM-DD HH:mm:SS Z",
-        "error_file"           : "/home/${ADMIN_USERNAME}/logs/dashboard.err",
-        "out_file"             : "/home/${ADMIN_USERNAME}/logs/dashboard.out",
+        "error_file"           : "/home/${ADMIN_USERNAME}/logs/netstats_daemon.err",
+        "out_file"             : "/home/${ADMIN_USERNAME}/logs/netstats_daemon.out",
         "merge_logs"           : false,
         "watch"                : false,
         "max_restarts"         : 100,
@@ -191,79 +243,116 @@ EOF
     echo "<===== install_netstats"
 }
 
-start_docker() {
-    echo "=====> start_docker"
-    cat > docker.start <<EOF
-sudo docker run -d \\
-    --name soundchain-poa \\
-    -p 30300:30300 \\
-    -p 30300:30300/udp \\
-    -p 8080:8080 \\
-    -p 8180:8180 \\
-    -p 8540:8540 \\
-    -v "$(pwd)/${NODE_PWD}:/build/${NODE_PWD}" \\
-    -v "$(pwd)/parity:/build/parity" \\
-    -v "$(pwd)/${GENESIS_JSON}:/build/${GENESIS_JSON}" \\
-    -v "$(pwd)/${NODE_TOML}:/build/${NODE_TOML}" \\
-    ${INSTALL_DOCKER_IMAGE} --config "${NODE_TOML}" > logs/docker.out 2> logs/docker.err
-container_id="\$(cat logs/docker.out)"
-sudo ln -sf "/var/lib/docker/containers/\${container_id}/\${container_id}-json.log" logs/parity.log
-EOF
-    chmod +x docker.start
-    ./docker.start
-    echo "<===== start_docker"
-}
+# start_docker() {
+#     echo "=====> start_docker"
+#     cat > docker.start <<EOF
+# sudo docker run -d \\
+#     --name musereum-poa \\
+#     -p 30300:30300 \\
+#     -p 30300:30300/udp \\
+#     -p 8080:8080 \\
+#     -p 8180:8180 \\
+#     -p 8540:8540 \\
+#     -v "$(pwd)/${NODE_PWD}:/build/${NODE_PWD}" \\
+#     -v "$(pwd)/parity:/build/parity" \\
+#     -v "$(pwd)/${GENESIS_JSON}:/build/${GENESIS_JSON}" \\
+#     -v "$(pwd)/${NODE_TOML}:/build/${NODE_TOML}" \\
+#     ${INSTALL_DOCKER_IMAGE} --config "${NODE_TOML}" > logs/docker.out 2> logs/docker.err
+# container_id="\$(cat logs/docker.out)"
+# sudo ln -sf "/var/lib/docker/containers/\${container_id}/\${container_id}-json.log" logs/parity.log
+# EOF
+#     chmod +x docker.start
+#     ./docker.start
+#     echo "<===== start_docker"
+# }
 
 use_deb() {
     echo "=====> use_deb"
-    curl -O http://d1h4xl4cr1h0mo.cloudfront.net/v1.6.8/x86_64-unknown-linux-gnu/parity_1.6.8_amd64.deb
-    dpkg -i parity_1.6.8_amd64.deb
+    curl -LO 'http://parity-downloads-mirror.parity.io/v1.7.0/x86_64-unknown-linux-gnu/parity_1.7.0_amd64.deb'
+    sudo dpkg -i parity_1.7.0_amd64.deb
     sudo apt-get install dtach
 
-    cat > rundeb.sh << EOF
-sudo parity --config "${NODE_TOML}" >> parity.out 2>> parity.err
+    cat > parity.start << EOF
+dtach -n parity.dtach bash -c "parity -l engine=trace,discovery=trace,network=trace --config ${NODE_TOML} --ui-no-validation >> logs/parity.out 2>> logs/parity.err"
 EOF
-    chmod +x rundeb.sh
-    dtach -n par "./rundeb.sh"
+    chmod +x parity.start
+    ./parity.start
     echo "<===== use_deb"
+}
+
+# use_bin() {
+#     echo "=====> use_bin"
+#     sudo apt-get install -y dtach unzip
+#     curl -L -o parity-bin-v1.7.0.zip 'https://gitlab.parity.io/parity/parity/-/jobs/61863/artifacts/download'
+#     unzip parity-bin-v1.7.0.zip -d parity-bin-v1.7.0
+#     ln -s parity-bin-v1.7.0/target/release/parity parity-v1.7.0
+
+#     cat > parity.start << EOF
+# dtach -n parity.dtach bash -c "./parity-v1.7.0 -l discovery=trace,network=trace --config ${NODE_TOML} --ui-no-validation >> logs/parity.out 2>> logs/parity.err"
+# EOF
+#     chmod +x parity.start
+#     ./parity.start
+#     echo "<===== use_bin"
+# }
+
+compile_source() {
+    echo "=====> compile_source"
+    sudo apt-get -y install gcc g++ libssl-dev libudev-dev pkg-config
+    curl https://sh.rustup.rs -sSf | sh -s -- -y
+    source "/home/${ADMIN_USERNAME}/.cargo/env"
+    rustc --version
+    cargo --version
+
+    git clone -b "v1.7.0" https://github.com/paritytech/parity parity-src-v1.7.0
+    cd parity-src-v1.7.0
+    cargo build --release
+    cd ..
+    ln -s parity-src-v1.7.0/target/release/parity parity-v1.7.0
+
+    cat > parity.start << EOF
+./parity-v1.7.0 -l discovery=trace,network=trace --config "${NODE_TOML}" --ui-no-validation >> logs/parity.out 2>> logs/parity.err
+EOF
+    chmod +x parity.start
+    dtach -n parity.dtach "./parity.start"
+    echo "<===== compile_source"
 }
 
 install_scripts() {
     echo "=====> install_scripts"
-    git clone -b master --single-branch https://github.com/soundchain/soundchain-scripts
-    ln -s node.toml soundchain-scripts/node.toml
-    cd soundchain-scripts/scripts
+    git clone -b master --single-branch https://github.com/musereum/musereum-scripts
+    ln -s ../node.toml musereum-scripts/node.toml
+    cd musereum-scripts/scripts
     npm install
     sudo bash -c "cat > /etc/cron.hourly/transferRewardToPayoutKey <<EOF
 #!/bin/bash
 cd "$(pwd)"
-echo "Running transferRewardToPayoutKey at $(date)" >> transferRewardToPayoutKey.out
-echo "Running transferRewardToPayoutKey at $(date)" >> transferRewardToPayoutKey.err
-node transferRewardToPayoutKey.js >> transferRewardToPayoutKey.out 2>> transferRewardToPayoutKey.err
-echo "" >> transferRewardToPayoutKey.out
-echo "" >> transferRewardToPayoutKey.err
+echo "Starting at \$(date)" >> "/home/${ADMIN_USERNAME}/logs/transferRewardToPayoutKey.out"
+echo "Starting at \$(date)" >> "/home/${ADMIN_USERNAME}/logs/transferRewardToPayoutKey.err"
+node transferRewardToPayoutKey.js >> "/home/${ADMIN_USERNAME}/logs/transferRewardToPayoutKey.out" 2>> "/home/${ADMIN_USERNAME}/logs/transferRewardToPayoutKey.err"
+echo "" >> "/home/${ADMIN_USERNAME}/logs/transferRewardToPayoutKey.out"
+echo "" >> "/home/${ADMIN_USERNAME}/logs/transferRewardToPayoutKey.err"
 EOF"
     sudo chmod 755 /etc/cron.hourly/transferRewardToPayoutKey
     cd ../..
     echo "<===== install_scripts"
 }
 
-setup_autoupdate() {
-    echo "=====> setup_autoupdate"
-    sudo docker pull oraclesorg/docker-run
-    sudo bash -c "cat > /etc/cron.daily/docker-autoupdate << EOF
-#!/bin/sh
-outlog='/home/${ADMIN_USERNAME}/logs/docker-autoupdate.out'
-errlog='/home/${ADMIN_USERNAME}/logs/docker-autoupdate.err'
-echo \"Starting: \\\$(date)\" >> \"\\\${outlog}\"
-echo \"Starting: \\\$(date)\" >> \"\\\${errlog}\"
-sudo docker run --rm -v /var/run/docker.sock:/tmp/docker.sock oraclesorg/docker-run update >> \"\\\${outlog}\" 2>> \"\\\${errlog}\"
-echo \"\" >> \"\\\${outlog}\"
-echo \"\" >> \"\\\${errlog}\"
-EOF"
-    sudo chmod 755 /etc/cron.daily/docker-autoupdate
-    echo "<===== setup_autoupdate"
-}
+# setup_autoupdate() {
+#     echo "=====> setup_autoupdate"
+#     sudo docker pull oraclesorg/docker-run
+#     sudo bash -c "cat > /etc/cron.daily/docker-autoupdate << EOF
+# #!/bin/sh
+# outlog='/home/${ADMIN_USERNAME}/logs/docker-autoupdate.out'
+# errlog='/home/${ADMIN_USERNAME}/logs/docker-autoupdate.err'
+# echo \"Starting: \\\$(date)\" >> \"\\\${outlog}\"
+# echo \"Starting: \\\$(date)\" >> \"\\\${errlog}\"
+# sudo docker run --rm -v /var/run/docker.sock:/tmp/docker.sock oraclesorg/docker-run update >> \"\\\${outlog}\" 2>> \"\\\${errlog}\"
+# echo \"\" >> \"\\\${outlog}\"
+# echo \"\" >> \"\\\${errlog}\"
+# EOF"
+#     sudo chmod 755 /etc/cron.daily/docker-autoupdate
+#     echo "<===== setup_autoupdate"
+# }
 
 # MAIN
 main () {
@@ -277,13 +366,14 @@ main () {
     allocate_swap
 
     install_nodejs
-    install_docker_ce
+    #install_docker_ce
     pull_image_and_configs
 
-    start_docker
-    #use_deb
+    #start_docker
+    use_deb
+    #use_bin
 
-    setup_autoupdate
+    #setup_autoupdate
 
     install_netstats
     install_scripts
