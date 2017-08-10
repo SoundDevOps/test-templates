@@ -151,16 +151,16 @@ Repeat the procedure to generate as many keys as necessary (12 in the current co
 It is important to note, that each deployment pulls some files from external repositories:
 
 * spec.json (_aka_ genesis.json) and currency transferring scripts are pulled from [musereum-scripts](https://github.com/musereum/musereum-scripts)
-* contract's constructor used in spec.json is the same as in [oracles-contract](https://github.com/oraclesorg/oracles-contract)
-* chain explorer is pulled from [this repo](https://github.com/oraclesorg/chain-explorer)
+* contract's constructor used in spec.json is the same as in [musereum-contract](https://github.com/musereum/musereum-contract)
+* chain explorer is pulled from [this repo](https://github.com/musereum/chain-explorer)
 * eth-net-intelligence-api is using this [repo](https://github.com/musereum/eth-net-intelligence-api)
-* eth-netstats dashboard is pulled from [eth-netstats](https://github.com/oraclesorg/eth-netstats)
+* eth-netstats dashboard is pulled from [eth-netstats](https://github.com/musereum/eth-netstats)
 * docker image used to periodically auto-update the container is pulled from [docker hub](https://hub.docker.com/r/oraclesorg/docker-run/), which uses [this repo](https://github.com/oraclesorg/docker-run) to rebuild the image
 * initial keys are generate using [this script](https://github.com/musereum/musereum-initial-keys), which has a `config.json` file with contract definition in it.
 
 There are other repositories involved in the workflow:
 * [metamask plugin](https://github.com/oraclesorg/metamask-plugin)
-* DApps repositories: [voting](https://github.com/oraclesorg/oracles-dapps-voting), [key-generation](https://github.com/oraclesorg/oracles-dapps-keys-generation), [validators](https://github.com/oraclesorg/oracles-dapps-validators)
+* DApps repositories: [voting](https://github.com/musereum/musereum-dapps-voting), [key-generation](https://github.com/musereum/musereum-dapps-keys-generation), [validators](https://github.com/musereum/musereum-dapps-validators)
 * [faucet](https://github.com/oraclesorg/oracles-faucet)
 
 and other repositories https://github.com/oraclesorg
