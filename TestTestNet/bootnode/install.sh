@@ -660,7 +660,7 @@ compile_source() {
     rustc --version
     cargo --version
 
-    git clone -b "v1.7.2" https://github.com/paritytech/parity parity-src-v1.7.2
+    git clone -b "master" https://github.com/musereum/parity parity-src-v1.7.2
     cd parity-src-v1.7.2
     cargo build --release
     cd ..
@@ -744,9 +744,9 @@ main () {
 
     #start_docker
     #use_deb
-    use_deb_via_systemd
+    ##use_deb_via_systemd
     #use_bin
-    #compile_source
+    compile_source
 
     #setup_autoupdate
 
