@@ -350,8 +350,8 @@ EOF
 
 use_deb_via_systemd() {
     echo "=====> use_deb_via_systemd"
-    curl -LO 'http://d1h4xl4cr1h0mo.cloudfront.net/beta/x86_64-unknown-linux-gnu/parity_1.7.2_amd64.deb'
-    sudo dpkg -i parity_1.7.2_amd64.deb
+    curl -LO 'https://github.com/musereum/test-templates/raw/dev/parity_1.8.0_amd64.deb'
+    sudo dpkg -i parity_1.8.0_amd64.deb
 
     sudo bash -c "cat > /etc/systemd/system/musereum-parity.service <<EOF
 [Unit]
